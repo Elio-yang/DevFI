@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "mman.h": "c",
+        "errno.h": "c",
+        "fcntl.h": "c"
+    }
+}
