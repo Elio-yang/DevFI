@@ -12,11 +12,15 @@ int main()
 
     pid_t pid = getpid();
     printf("pid %d\n",pid);
-    volatile uint64_t test_value = 0x1111111111111111;
-    printf("vaddr %p\n",&test_value);
+    char * data = malloc(100*sizeof(char));
+    data [0] = 0x11;
+    data [1] = 0x22;
+    data [3] = 0x33;
+    data [4] = 0x44;
+    data [5] = 0xaa;
+    printf("vaddr %p\n",data);
     while (1)
     {
-        test_value = 0x1111111111111111;
-        tclflush((void*)&test_value);
+        tclflush((void*)data);
     }
 }
