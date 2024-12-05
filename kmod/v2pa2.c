@@ -16,10 +16,6 @@ int main(int argc, char **argv)
 	int ret = -1;
 	int page_size, page_shift = -1;
 
-    int read_size = 100000;
-    char buf[read_size];
-    int ram_fd = open("/dev/mem", O_RDWR | O_SYNC);
-
 	page_size = getpagesize();
 	pid = strtol(argv[1], &endptr, 10);
 	vaddr = strtol(argv[2], &endptr, 16);
@@ -56,20 +52,6 @@ int main(int argc, char **argv)
 	paddr = (unsigned long)((unsigned long)paddr << page_shift) + offset;
 	printf("physical address is 0x%lx\n", paddr);
 	printf("physical address is %u\n", paddr);
-
-    //read physical addr
-    if (ram_fd < 0){
-        perror("open");
-        exit(1);
-    }else{
-        printf("open /dev/mem success\n");
-    }
-    lseek(ram_fd, 0, SEEK_SET);
-    read(ram_fd, buf, read_size);
-    for (int i=0;i<read_size;i++){
-        printf("%x",buf[i]);
-    }
-    printf("\n");
     
 	ret = 0;
 err:
