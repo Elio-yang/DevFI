@@ -1,1 +1,0 @@
-cmd_/home/jasony/Desktop/linux-sys/kmod/Module.symvers := sed 's/\.ko$$/\.o/' /home/jasony/Desktop/linux-sys/kmod/modules.order | scripts/mod/modpost -m -a  -o /home/jasony/Desktop/linux-sys/kmod/Module.symvers -e -i Module.symvers   -T -

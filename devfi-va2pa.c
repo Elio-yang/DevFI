@@ -7,6 +7,7 @@
 #define PAGE_SHIFT 12
 #define PAGEMAP_LENGTH 8
 
+// usage: ./a.out <pid> <vaddr> [address is decimal based]
 int main(int argc, char **argv)
 {
 	unsigned long vaddr, pid, paddr = 0, offset;

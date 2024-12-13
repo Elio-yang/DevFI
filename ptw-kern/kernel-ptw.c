@@ -8,6 +8,7 @@
 MODULE_LICENSE("GPL");
 MODULE_AUTHOR("Yang Yang");
 
+// use page table walk to translate virtual address to physical address
 static int __init phys_addr_module_init(void)
 {
     volatile uint64_t test_value = 0xBADDBADDBADDBADD;

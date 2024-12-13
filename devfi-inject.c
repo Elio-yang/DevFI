@@ -1,32 +1,3 @@
-/*
- * devmem2.c: Simple program to read/write from/to any location in memory.
- *
- *  Copyright (C) 2000, Jan-Derk Bakker (jdb@lartmaker.nl)
- *
- *
- * This software has been developed for the LART computing board
- * (http://www.lart.tudelft.nl/). The development has been sponsored by
- * the Mobile MultiMedia Communications (http://www.mmc.tudelft.nl/)
- * and Ubiquitous Communications (http://www.ubicom.tudelft.nl/)
- * projects.
- *
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- *
- */
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -54,35 +25,33 @@ int main(int argc, char **argv) {
 	
 	if(argc < 2) {
 		fprintf(stderr, "\nUsage:\t%s { address } [ type [ data ] ]\n"
-			"\taddress : memory address to act upon\n"
+			"\taddress : physical memory address to act upon\n"
 			"\ttype    : access operation type : [b]yte, [h]alfword, [w]ord\n"
 			"\tdata    : data to be written\n\n",
 			argv[0]);
 		exit(1);
 	}
-	printf("offset size %d\n",sizeof(target));
-    target = 0x2e316f940;
-	printf("offset size %d\n",sizeof(target));
-    
-	
-	printf("Address: 0x%llx\n", target);
-
+	// the physical address to modify
+	target = strtoul(argv[1], 0, 0);
 
 	if(argc > 2)
 		access_type = tolower(argv[2][0]);
 
-
+	// kernel must be compiled with CONFIG_STRICT_DEVMEM=n
     if((fd = open("/dev/mem", O_RDWR | O_SYNC)) == -1) FATAL;
     printf("/dev/mem opened.\n"); 
     fflush(stdout);
     
-    /* Map one page */
-    printf("target & ~MAP_MASK: 0x%lx\n", target & ~MAP_MASK);
-    map_base = mmap(0, MAP_SIZE, PROT_READ | PROT_WRITE, MAP_SHARED, fd, target & ~MAP_MASK);
-    if(map_base == (void *) -1) FATAL;
-    printf("Memory mapped at address %p.\n", map_base); 
-    fflush(stdout);
     
+    // using mmap, read/write to physical memory as rw to a array
+	// map that page
+    map_base = mmap(0, MAP_SIZE, PROT_READ | PROT_WRITE, MAP_SHARED, fd, target & ~MAP_MASK);
+	// mmap might fail if devmem is not correctly configured
+    if(map_base == (void *) -1) FATAL;
+
+	// address in the mapped data
+	// target us the physical addr
+	// get the offset inside a page
     virt_addr = map_base + (target & MAP_MASK);
     switch(access_type) {
 		case 'b':
@@ -98,6 +67,7 @@ int main(int argc, char **argv) {
 			fprintf(stderr, "Illegal data type '%c'.\n", access_type);
 			exit(2);
 	}
+	// print the value at the physical address
     printf("Value at address 0x%X (%p): 0x%X\n", target, virt_addr, read_result); 
     fflush(stdout);
 

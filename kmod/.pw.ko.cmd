@@ -1,1 +1,0 @@
-cmd_/home/jasony/Desktop/linux-sys/kmod/pw.ko := ld -r  -m elf_x86_64 -z noexecstack   --build-id=sha1  -T scripts/module.lds -o /home/jasony/Desktop/linux-sys/kmod/pw.ko /home/jasony/Desktop/linux-sys/kmod/pw.o /home/jasony/Desktop/linux-sys/kmod/pw.mod.o;  true
