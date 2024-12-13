@@ -1,14 +1,15 @@
-ALL= mmap_vic mmap_atk mmap_vic2
-CFLAGS= -ggdb3 -O2 -std=gnu99 
-all : $(ALL)
-	chmod  777 $(ALL)
+CC = gcc
 
-mmap_atk: mmap_atk.c
-	gcc $(CFLAGS) mmap_atk.c -o mmap_atk
-mmap_vic: mmap_vic.c
-	gcc $(CFLAGS) mmap_vic.c -o mmap_vic
-mmap_vic2: mmap_vic2.c
-	gcc $(CFLAGS) mmap_vic2.c -o mmap_vic2
+CFLAGS = -O2 -Wall
+
+SRC_FILES = $(wildcard *.c)
+
+BIN_FILES = $(SRC_FILES:.c=.bin)
+
+all: $(BIN_FILES)
+
+%.bin: %.c
+	$(CC) $(CFLAGS) $< -o $@
 
 clean:
-	rm -f $(ALL)
+	rm -f $(BIN_FILES)
