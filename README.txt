@@ -51,3 +51,6 @@ B. Usage
             ./devfi-inject.bin <paddr> [b/h/w] <data>
     7. mmap attck example
         a. just run a victim process and run the attcker
+
+
+Credit: https://github.com/brgl/busybox/blob/master/miscutils/devmem.c
